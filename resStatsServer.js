@@ -78,7 +78,7 @@ async function handleAppraisal(session, oRep) {
         };
 
         console.log('senddata: ', reqData);
-        // logger.info('senddata: ', reqData);
+        logger.info('senddata: ', reqData);
         await api.finish(reqData);
     } catch (err) {
         logger.error(err);
