@@ -71,7 +71,7 @@ async function handleUser(session, oRep) {
             notes: userProfile.ownerCount.photo,//作品数量
             likeNum: userProfile.ownerCount.like,//博主点赞别人作品数
             collected: userProfile.ownerCount.collect,//博主收藏别人作品数     
-            // constellation: userinfo.constellation,//星座
+            constellation: userinfo.constellation,//星座
             location: userProfile.cityName//所在地
         };
 
