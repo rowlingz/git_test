@@ -1,3 +1,29 @@
+module.exports = async (server, options) => {
+    server.on('request', (req, res) => {
+        res.on('error', logger.error);
+
+        let oRep = req.originalReq;
+        let type = oRep.ruleValue
+
+        req.getSession(async session => {
+            try {
+                console.log(type);
+                switch (type) {
+                    case 'USER':
+                        return await handleUser(session, oRep);
+                    case 'FEEDS':
+                        return await handleFeeds(session, oRep);
+                    case 'APPRAISAL':
+                        return await handleAppraisal(session, oRep);
+                    default:
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    });
+};
+
 function getFeedData(feedInfo) {
     let feedData = {
         userId: feedInfo.user_id,//作者Id
