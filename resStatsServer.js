@@ -98,3 +98,66 @@ async function handleUser(session, oRep) {
         });
     }
 }
+
+async function handleFeeds(session, oRep) {
+    // 获取时间维度在近90天的数据,如果当前网页的最后一条数据在90天内时间范围，则需继续滑；
+    // 如果已经超过了，则将这个url 解析完了，就不滑了，
+    let { user_id } = querystring.parse(session.req.body);
+    console.log('user_id: ', user_id);
+
+    try {
+        let { feeds } = JSON.parse(session.res.body);
+        // 终点判断
+        let isEndpage;
+        let feedDatas;
+        if (feeds.length == 0) {
+            isEndpage = true;
+            feedDatas = [];
+            console.log('当前用户无作品');
+        } else {
+            if (feeds.length < 20) {
+                console.log('当前用户已经滑到最后一页');
+                isEndpage = true;
+            } else {
+                let new_time = Date.now();
+                // let endFeed = feeds[feeds.length-1];
+                // let endTime = (endFeed && endFeed.timestamp) || Date.now();
+                let end_time = feeds[feeds.length-1].timestamp;
+                if ((new_time - end_time) > 90*24*3600*1000) {
+                    console.log('时间差已经大于90天');
+                    isEndpage = true;
+                } else {
+                    isEndpage = false;
+                    console.log('时间差小于90天，需要滑动屏幕');
+                }
+            }
+
+            feedDatas = feeds.map(function (feed) {
+                let feedExg = feed.serverExpTag;
+                let feedId = feedExg.split('|')[1];
+                let feedData = getFeedData(feed);
+                feedData.itemId = feedId;
+                return feedData;
+            });  
+        }
+
+        let repData = {
+            uid: `${user_id}|5`,
+            platform: 'KUAISHOU',
+            jobType: 'FEEDS',
+            data: feedDatas,
+            isEndpage
+        }
+        console.log('feed长度： ',feedDatas.length);
+        console.log({user_id, feedDatas:feedDatas[0]});
+        // logger.info('feedsData', respData);
+        // 调用api进行数据回传
+        await api.feeds(repData);
+    } catch (err) {
+        console.log(err);
+        await api.feeds({
+            uid: `${user_id}|5`,
+            isErr: true
+        });
+    }
+};
