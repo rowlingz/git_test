@@ -54,3 +54,47 @@ async function handleAppraisal(session, oRep) {
         });
     }
 }
+
+async function handleUser(session, oRep) {
+    let {user} = querystring.parse(session.req.body);
+    console.log('user: ', user);
+    try {
+        let { userProfile } = JSON.parse(session.res.body);
+        let userData = {
+            mid: user,//用户id
+            describe: userProfile.profile.user_text,// 签名
+            gender: _parseGender(userProfile.profile.user_sex),// 性别（"F" / "M"）
+            nickName: userProfile.profile.user_name,//昵称
+            verify: userProfile.profile.verified ? '已认证' : '未认证',// false  or true 这里要修改一下 认证情况
+            fansNum: userProfile.ownerCount.fan,//粉丝数
+            follows: userProfile.ownerCount.follow,//关注数
+            notes: userProfile.ownerCount.photo,//作品数量
+            likeNum: userProfile.ownerCount.like,//博主点赞别人作品数
+            collected: userProfile.ownerCount.collect,//博主收藏别人作品数     
+            // constellation: userinfo.constellation,//星座
+            location: userProfile.cityName//所在地
+        };
+
+        let reqData = {
+            uid: `${user}|1`,
+            platform: 'KUAISHOU',
+            jobType: 'USER',
+            data: userData,
+            tasks: [
+                {url: `kwai://profile/${user}`, jobType:5, platform:8}
+            ]
+        };
+
+        console.log('senddata', reqData)
+        //解析数据写入日志文件；
+        // logger.info('senddata', reqData);
+        // 调用whistle_manage 进行数据回传
+        await api.finish(reqData);
+    } catch (err) {
+        console.log(err);
+        await api.finish({
+            uid: `${user}|1`,
+            isErr: true
+        });
+    }
+}
