@@ -1,3 +1,10 @@
+'use strict';
+
+const logger = require('../libs/logger');
+const api = require('../api');
+const querystring = require('querystring');
+
+
 module.exports = async (server, options) => {
     server.on('request', (req, res) => {
         res.on('error', logger.error);
