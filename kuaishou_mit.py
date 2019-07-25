@@ -42,3 +42,5 @@ def response(flow):
         print('=======数据存入完毕')
 
 
+if if __name__ == "__main__":
+        print('实在不知道加哪了～')
