@@ -11,7 +11,7 @@ import re
 
 def split_url(text):
     """利用正则表达式筛选出匹配的快手feed分享url"""
-    result = re.search("http://m.gifshow.com[^\s]*", text)
+    result = re.search("http://(m|[w]{3}).gifshow.com[\S]{8}", text)
     if result:
         target_url = result[0]
         return target_url
