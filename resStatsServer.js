@@ -1,3 +1,37 @@
+'use strict';
+// kuaihsou spider 
+
+const logger = require('../libs/logger');
+const api = require('../api');
+const querystring = require('querystring');
+
+
+module.exports = async (server, options) => {
+    server.on('request', (req, res) => {
+        res.on('error', logger.error);
+
+        let oRep = req.originalReq;
+        let type = oRep.ruleValue
+
+        req.getSession(async session => {
+            try {
+                console.log(type);
+                switch (type) {
+                    case 'USER':
+                        return await handleUser(session, oRep);
+                    case 'FEEDS':
+                        return await handleFeeds(session, oRep);
+                    case 'APPRAISAL':
+                        return await handleAppraisal(session, oRep);
+                    default:
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        });
+    });
+};
+
 function getFeedData(feedInfo) {
     let feedData = {
         userId: feedInfo.user_id,//作者Id
@@ -44,7 +78,7 @@ async function handleAppraisal(session, oRep) {
         };
 
         console.log('senddata: ', reqData);
-        // logger.info('senddata: ', reqData);
+        logger.info('senddata: ', reqData);
         await api.finish(reqData);
     } catch (err) {
         logger.error(err);
@@ -53,4 +87,14 @@ async function handleAppraisal(session, oRep) {
             isErr: true
         });
     }
+}
+
+function _parseGender(genderInfo) {
+    switch (genderInfo) {
+        case 'F':
+            return '女';
+        case 'M':
+            return '男';
+    }
+    return '';
 }
