@@ -145,3 +145,4 @@ if __name__ == '__main__':
         print('==分析url: ', url)
         info = uid_from_feedurl(url)
         print('其结果为：', info)
+    print('end')
