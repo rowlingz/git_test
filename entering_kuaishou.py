@@ -26,8 +26,7 @@ def uid_from_feedurl(feed_url):
     :return:
     """
     headers = {
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1',        # 这里为手机端的headers
-        'Host': 'm.gifshow.com'
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'        # 这里为手机端的headers
     }
 
     resp = requests.get(feed_url, headers=headers)
