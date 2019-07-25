@@ -131,6 +131,8 @@ def feed_task(flow, feed_id):
         print('当前url中未找到目标feed，需下滑')
         return
 
+def git_test():
+    print('just test git push')
 
 if __name__ == '__main__':
     """
