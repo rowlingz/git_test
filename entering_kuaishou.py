@@ -134,6 +134,10 @@ def feed_task(flow, feed_id):
 def git_test():
     print('just test git push')
 
+
+def new():
+    print('当所有分支都合并了，再次提及到这分支，会出现什么呢？')
+
 if __name__ == '__main__':
     """
     输出结果为
