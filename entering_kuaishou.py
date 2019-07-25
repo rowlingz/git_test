@@ -11,7 +11,7 @@ import re
 
 def split_url(text):
     """利用正则表达式筛选出匹配的快手feed分享url"""
-    result = re.search("http://m.gifshow.com[^\s]*", text)
+    result = re.search("http://(m|[w]{3}).gifshow.com[\S]{8}", text)
     if result:
         target_url = result[0]
         return target_url
@@ -26,8 +26,7 @@ def uid_from_feedurl(feed_url):
     :return:
     """
     headers = {
-        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1',        # 这里为手机端的headers
-        'Host': 'm.gifshow.com'
+        'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'        # 这里为手机端的headers
     }
 
     resp = requests.get(feed_url, headers=headers)
@@ -146,3 +145,4 @@ if __name__ == '__main__':
         print('==分析url: ', url)
         info = uid_from_feedurl(url)
         print('其结果为：', info)
+    print('end')
