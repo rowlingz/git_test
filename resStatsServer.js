@@ -87,6 +87,17 @@ async function handleAppraisal(session, oRep) {
             isErr: true
         });
     }
+
+}
+
+function _parseGender(genderInfo) {
+    switch (genderInfo) {
+        case 'F':
+            return '女';
+        case 'M':
+            return '男';
+    }
+    return '';
 }
 
 function _parseGender(genderInfo) {
